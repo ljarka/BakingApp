@@ -3,6 +3,7 @@ package com.github.ljarka.bakingapp
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.widget.Toast
 import com.github.ljarka.bakingapp.detail.RecipeDetailActivity
@@ -19,7 +20,7 @@ class MainActivity : AppCompatActivity(), OnRecipeItemClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        recyclerView.layoutManager = GridLayoutManager(this, resources.getInteger(R.integer.span_count))
         recyclerView.adapter = adapter
         adapter.onRecipeItemClickListener = this
         viewModel.getRecipes()
