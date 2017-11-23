@@ -14,6 +14,8 @@ class RecipesAdapter : RecyclerView.Adapter<RecipesAdapter.RecipesViewHolder>() 
             notifyDataSetChanged()
         }
 
+    var onRecipeItemClickListener: OnRecipeItemClickListener? = null
+
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecipesViewHolder {
         return RecipesViewHolder(LayoutInflater.from(parent?.context).inflate(R.layout.item_recipe, parent, false))
     }
@@ -26,5 +28,13 @@ class RecipesAdapter : RecyclerView.Adapter<RecipesAdapter.RecipesViewHolder>() 
         return recipes?.size ?: 0
     }
 
-    class RecipesViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView)
+    inner class RecipesViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+        init {
+            itemView?.setOnClickListener(this)
+        }
+
+        override fun onClick(view: View?) {
+            this@RecipesAdapter.onRecipeItemClickListener?.onRecipeItemClick(this@RecipesAdapter.recipes?.get(adapterPosition))
+        }
+    }
 }
