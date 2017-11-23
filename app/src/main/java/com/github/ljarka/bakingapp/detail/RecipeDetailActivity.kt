@@ -12,17 +12,18 @@ class RecipeDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipe_detail)
-
+        val recipe: Recipe = intent.getParcelableExtra(EXTRA_RECIPE)
+        supportActionBar?.title = recipe.name
         supportFragmentManager.beginTransaction()
-                .add(R.id.fragmentContainer, RecipeDetailFragment.newInstance())
+                .add(R.id.fragmentContainer, RecipeDetailFragment.newInstance(recipe))
                 .commit()
     }
 
     companion object {
-        var EXTRA_RECIPE: String = "extra_recipe"
+        private val EXTRA_RECIPE = "extra_recipe"
 
         fun createIntent(context: Context, recipe: Recipe) {
-            var intent = Intent(context, RecipeDetailActivity::class.java)
+            val intent = Intent(context, RecipeDetailActivity::class.java)
             intent.putExtra(EXTRA_RECIPE, recipe)
             context.startActivity(intent)
         }
