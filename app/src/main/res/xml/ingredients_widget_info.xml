@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minResizeWidth="100dp"
+    android:minWidth="200dp"
+    android:minHeight="200dp"
+    android:minResizeHeight="100dp"
+    android:configure="com.github.ljarka.bakingapp.widget.WidgetConfigurationActivity"
+    android:initialKeyguardLayout="@layout/widget_ingredients"
+    android:initialLayout="@layout/widget_ingredients"
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="0"
+    android:widgetCategory="home_screen">
+</appwidget-provider>

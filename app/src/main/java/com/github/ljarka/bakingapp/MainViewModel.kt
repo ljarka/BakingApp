@@ -12,7 +12,7 @@ class MainViewModel : ViewModel() {
     var retrofit: Retrofit = Retrofit.Builder()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://d17h27t6h515a5.cloudfront.net")
+            .baseUrl(BakingApplication.API_URL)
             .build()
 
     fun getRecipes(): Observable<List<Recipe>> {
