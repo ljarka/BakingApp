@@ -2,6 +2,7 @@ package com.github.ljarka.bakingapp.detail
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -23,7 +24,8 @@ class RecipeDetailActivity : AppCompatActivity(), OnRecipeStepClickListener {
         } else {
             val fragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
 
-            if (fragment is RecipeDetailStepFragment) {
+            if (fragment is RecipeDetailStepFragment && resources.getBoolean(
+                    R.bool.tablet) && resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
                 supportFragmentManager.beginTransaction()
                         .replace(R.id.fragmentContainer, RecipeDetailFragment.newInstance(recipe),
                                 RecipeDetailFragment.FRAGMENT_TAG)
