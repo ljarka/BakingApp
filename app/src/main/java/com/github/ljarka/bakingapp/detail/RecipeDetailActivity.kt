@@ -25,7 +25,7 @@ class RecipeDetailActivity : AppCompatActivity(), OnRecipeStepClickListener {
             val fragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
 
             if (fragment is RecipeDetailStepFragment && resources.getBoolean(
-                    R.bool.tablet) && resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    R.bool.tablet) && resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 supportFragmentManager.beginTransaction()
                         .replace(R.id.fragmentContainer, RecipeDetailFragment.newInstance(recipe),
                                 RecipeDetailFragment.FRAGMENT_TAG)
