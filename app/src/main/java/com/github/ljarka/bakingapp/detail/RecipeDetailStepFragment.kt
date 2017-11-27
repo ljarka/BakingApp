@@ -52,7 +52,7 @@ class RecipeDetailStepFragment : Fragment() {
                 dataSourceFactory, DefaultExtractorsFactory(), null, null)
         player?.prepare(videoSource)
 
-        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE && !resources.getBoolean(R.bool.tablet)) {
             playerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL)
             playerView.layoutParams.height = resources.displayMetrics.heightPixels
             description.visibility = View.GONE

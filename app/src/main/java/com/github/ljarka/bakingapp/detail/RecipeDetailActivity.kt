@@ -4,10 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import com.github.ljarka.bakingapp.R
 import com.github.ljarka.bakingapp.network.model.Recipe
 import com.github.ljarka.bakingapp.network.model.Step
-import kotlinx.android.synthetic.main.activity_recipe_detail.*
 
 class RecipeDetailActivity : AppCompatActivity(), OnRecipeStepClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +24,7 @@ class RecipeDetailActivity : AppCompatActivity(), OnRecipeStepClickListener {
     }
 
     override fun onRecipeStepClick(step: Step?) {
-        if (secondFragmentContainer == null) {
+        if (findViewById<View>(R.id.secondFragmentContainer) == null) {
             supportFragmentManager.beginTransaction()
                     .replace(R.id.fragmentContainer, RecipeDetailStepFragment.newInstance(step),
                             RecipeDetailFragment.FRAGMENT_TAG)
@@ -32,7 +32,7 @@ class RecipeDetailActivity : AppCompatActivity(), OnRecipeStepClickListener {
                     .commit()
         } else {
             supportFragmentManager.beginTransaction()
-                    .add(R.id.secondFragmentContainer, RecipeDetailStepFragment.newInstance(step),
+                    .replace(R.id.secondFragmentContainer, RecipeDetailStepFragment.newInstance(step),
                             RecipeDetailStepFragment.FRAGMENT_TAG)
                     .commit()
         }
