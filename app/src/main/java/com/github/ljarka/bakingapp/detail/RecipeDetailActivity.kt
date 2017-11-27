@@ -20,6 +20,15 @@ class RecipeDetailActivity : AppCompatActivity(), OnRecipeStepClickListener {
             supportFragmentManager.beginTransaction()
                     .add(R.id.fragmentContainer, RecipeDetailFragment.newInstance(recipe), RecipeDetailFragment.FRAGMENT_TAG)
                     .commit()
+        } else {
+            val fragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
+
+            if (fragment is RecipeDetailStepFragment) {
+                supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainer, RecipeDetailFragment.newInstance(recipe),
+                                RecipeDetailFragment.FRAGMENT_TAG)
+                        .commit()
+            }
         }
     }
 
