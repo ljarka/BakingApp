@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.fragment_recipe_step_detail.view.*
 
 
 class RecipeDetailStepFragment : Fragment() {
-    private lateinit var player: SimpleExoPlayer
+    private var player: SimpleExoPlayer? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_recipe_step_detail, container, false)
@@ -33,21 +33,24 @@ class RecipeDetailStepFragment : Fragment() {
         val step: Step? = arguments?.getParcelable(EXTRA_STEP)
         view.description.text = step?.description
 
-        val bandwidthMeter = DefaultBandwidthMeter()
-        val videoTrackSelectionFactory = AdaptiveTrackSelection.Factory(bandwidthMeter)
-        val trackSelector = DefaultTrackSelector(videoTrackSelectionFactory)
-        player = ExoPlayerFactory.newSimpleInstance(context, trackSelector)
-        val dataSourceFactory = DefaultDataSourceFactory(context, Util.getUserAgent(context, context?.applicationInfo?.name))
-        playerView.player = player
-        val videoSource = ExtractorMediaSource(Uri.parse(step?.videoURL),
-                dataSourceFactory, DefaultExtractorsFactory(), null, null)
-        player.prepare(videoSource)
+        if (step?.videoURL!!.isNotEmpty()) {
+            view.playerView.visibility = View.VISIBLE
+            val bandwidthMeter = DefaultBandwidthMeter()
+            val videoTrackSelectionFactory = AdaptiveTrackSelection.Factory(bandwidthMeter)
+            val trackSelector = DefaultTrackSelector(videoTrackSelectionFactory)
+            player = ExoPlayerFactory.newSimpleInstance(context, trackSelector)
+            val dataSourceFactory = DefaultDataSourceFactory(context, Util.getUserAgent(context, context?.applicationInfo?.name))
+            playerView.player = player
+            val videoSource = ExtractorMediaSource(Uri.parse(step?.videoURL),
+                    dataSourceFactory, DefaultExtractorsFactory(), null, null)
+            player?.prepare(videoSource)
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        player.stop()
-        player.release()
+        player?.stop()
+        player?.release()
     }
 
     companion object {
