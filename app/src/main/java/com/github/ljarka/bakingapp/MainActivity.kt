@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
 import android.widget.Toast
 import com.github.ljarka.bakingapp.detail.RecipeDetailActivity
 import com.github.ljarka.bakingapp.network.model.Recipe

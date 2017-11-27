@@ -1,7 +1,6 @@
 package com.github.ljarka.bakingapp.widget
 
 import android.app.Activity
-import android.app.Activity.RESULT_OK
 import android.appwidget.AppWidgetManager
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent

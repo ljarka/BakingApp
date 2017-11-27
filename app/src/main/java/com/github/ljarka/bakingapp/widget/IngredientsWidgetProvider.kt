@@ -19,7 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class IngredientsWidgetProvider : AppWidgetProvider() {
 
-    var retrofit: Retrofit = Retrofit.Builder()
+    private var retrofit: Retrofit = Retrofit.Builder()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(BakingApplication.API_URL)
