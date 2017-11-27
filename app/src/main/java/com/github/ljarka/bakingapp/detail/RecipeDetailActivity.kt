@@ -39,7 +39,7 @@ class RecipeDetailActivity : AppCompatActivity(), OnRecipeStepClickListener {
     }
 
     companion object {
-        private val EXTRA_RECIPE = "extra_recipe"
+        const val EXTRA_RECIPE = "extra_recipe"
 
         fun createIntent(context: Context, recipe: Recipe) {
             val intent = Intent(context, RecipeDetailActivity::class.java)

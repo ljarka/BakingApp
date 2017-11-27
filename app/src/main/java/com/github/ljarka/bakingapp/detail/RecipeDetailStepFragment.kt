@@ -46,6 +46,7 @@ class RecipeDetailStepFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        player.stop()
         player.release()
     }
 
