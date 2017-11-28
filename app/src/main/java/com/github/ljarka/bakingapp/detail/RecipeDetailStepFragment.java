@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,10 @@ public class RecipeDetailStepFragment extends Fragment {
     public static final String FRAGMENT_TAG = "RecipeDetailStepFragment";
     private static final String EXTRA_STEP = "extra_step";
     private SimpleExoPlayer player;
+    private SimpleExoPlayerView playerView;
     private TextView description;
+    private String videoUrl;
+    private long restoredPlayerPosition;
 
     @Nullable
     @Override
@@ -45,25 +49,44 @@ public class RecipeDetailStepFragment extends Fragment {
         Step step = getArguments().getParcelable(EXTRA_STEP);
         description = view.findViewById(R.id.description);
         description.setText(step.getDescription());
+        playerView = view.findViewById(R.id.playerView);
+        videoUrl = step.getVideoURL();
 
-        if (step.getVideoURL() != null && !step.getVideoURL().isEmpty()) {
-            prepareExoPlayer(view.<SimpleExoPlayerView>findViewById(R.id.playerView), step.getVideoURL(), savedInstanceState);
+        if (savedInstanceState != null) {
+            long currentPosition = savedInstanceState.getLong(CURRENT_POSITION);
+
+            if (currentPosition != 0) {
+                restoredPlayerPosition = savedInstanceState.getLong(CURRENT_POSITION);
+            }
+        }
+
+        if (!TextUtils.isEmpty(videoUrl)) {
+            adjustScreenToDisplayMovie();
         }
     }
 
-    private void prepareExoPlayer(SimpleExoPlayerView playerView, String videoUrl, @Nullable Bundle savedInstanceState) {
-        playerView.setVisibility(View.VISIBLE);
+    @Override
+    public void onStart() {
+        super.onStart();
+        initPlayer();
+    }
 
+    private void initPlayer() {
         DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         AdaptiveTrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
         DefaultTrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
         player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector);
+        playerView.setPlayer(player);
         DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(getContext(),
                 Util.getUserAgent(getContext(), getContext().getApplicationInfo().name));
-        playerView.setPlayer(player);
         ExtractorMediaSource videoSource =
                 new ExtractorMediaSource(Uri.parse(videoUrl), dataSourceFactory, new DefaultExtractorsFactory(), null, null);
         player.prepare(videoSource);
+        player.seekTo(restoredPlayerPosition);
+    }
+
+    private void adjustScreenToDisplayMovie() {
+        playerView.setVisibility(View.VISIBLE);
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && !getResources().getBoolean(
                 R.bool.tablet)) {
@@ -71,14 +94,6 @@ public class RecipeDetailStepFragment extends Fragment {
             playerView.getLayoutParams().height = getResources().getDisplayMetrics().heightPixels;
             description.setVisibility(View.GONE);
             hideSystemUI();
-        }
-
-        if (savedInstanceState != null) {
-            long currentPosition = savedInstanceState.getLong(CURRENT_POSITION);
-
-            if (currentPosition != 0) {
-                player.seekTo(savedInstanceState.getLong(CURRENT_POSITION));
-            }
         }
     }
 
@@ -100,8 +115,12 @@ public class RecipeDetailStepFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onStop() {
+        super.onStop();
+        releasePlayer();
+    }
+
+    private void releasePlayer() {
         if (player != null) {
             player.stop();
             player.release();

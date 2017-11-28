@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.ljarka.bakingapp.network.model.Recipe;
@@ -22,7 +23,9 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
 
     @Override
     public void onBindViewHolder(RecipesViewHolder holder, int position) {
-        holder.name.setText(recipes.get(position).getName());
+        Recipe recipe = recipes.get(position);
+        holder.name.setText(recipe.getName());
+        GlideApp.with(holder.image).load(recipe.getImage()).placeholder(R.drawable.recipe_icon).into(holder.image);
     }
 
     @Override
@@ -41,10 +44,12 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesV
 
     class RecipesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView name;
+        ImageView image;
 
         public RecipesViewHolder(View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.name);
+            image = itemView.findViewById(R.id.image);
             itemView.setOnClickListener(this);
         }
 
