@@ -27,7 +27,8 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
 public class RecipeDetailStepFragment extends Fragment {
-    public static final String CURRENT_POSITION = "CurrentPosition";
+    private static final String CURRENT_POSITION = "CurrentPosition";
+    private static final String PLAY_WHEN_READY = "PlayWhenReady";
     public static final String FRAGMENT_TAG = "RecipeDetailStepFragment";
     private static final String EXTRA_STEP = "extra_step";
     private SimpleExoPlayer player;
@@ -35,6 +36,7 @@ public class RecipeDetailStepFragment extends Fragment {
     private TextView description;
     private String videoUrl;
     private long restoredPlayerPosition;
+    private boolean playWhenReady;
 
     @Nullable
     @Override
@@ -54,6 +56,7 @@ public class RecipeDetailStepFragment extends Fragment {
 
         if (savedInstanceState != null) {
             long currentPosition = savedInstanceState.getLong(CURRENT_POSITION);
+            playWhenReady = savedInstanceState.getBoolean(PLAY_WHEN_READY);
 
             if (currentPosition != 0) {
                 restoredPlayerPosition = savedInstanceState.getLong(CURRENT_POSITION);
@@ -83,6 +86,7 @@ public class RecipeDetailStepFragment extends Fragment {
                 new ExtractorMediaSource(Uri.parse(videoUrl), dataSourceFactory, new DefaultExtractorsFactory(), null, null);
         player.prepare(videoSource);
         player.seekTo(restoredPlayerPosition);
+        player.setPlayWhenReady(playWhenReady);
     }
 
     private void adjustScreenToDisplayMovie() {
@@ -100,7 +104,10 @@ public class RecipeDetailStepFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putLong(CURRENT_POSITION, player.getCurrentPosition());
+        if (player != null) {
+            outState.putLong(CURRENT_POSITION, player.getCurrentPosition());
+            outState.putBoolean(PLAY_WHEN_READY, player.getPlayWhenReady());
+        }
     }
 
     private void hideSystemUI() {
